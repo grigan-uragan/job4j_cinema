@@ -22,3 +22,7 @@ notifications:
       - prischepny@mail.ru
     on_success: never # default: change
     on_failure: always # default: always
+
+env:
+  global:
+    - CODECOV_TOKEN="06f8d2a5-33d8-4dd7-88a7-299c41da20d2"
