@@ -3,14 +3,25 @@ package ru.job4j.model;
 import java.util.Objects;
 
 public class Seat {
-    int id;
-    int row;
-    int column;
+    private int id;
+    private int row;
+    private int column;
+    private int price;
+    private int accountId;
 
-    public Seat(int id, int row, int column) {
+    public Seat(int row, int column, int price) {
+        this.row = row;
+        this.column = column;
+        accountId = 0;
+        this.price = price;
+    }
+
+    public Seat(int id, int row, int column, int price, int accountId) {
         this.id = id;
         this.row = row;
         this.column = column;
+        this.price = price;
+        this.accountId = accountId;
     }
 
     public int getId() {
@@ -37,6 +48,22 @@ public class Seat {
         this.column = column;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -52,5 +79,12 @@ public class Seat {
     @Override
     public int hashCode() {
         return Objects.hash(id, row, column);
+    }
+
+    @Override
+    public String toString() {
+        return "Seat{" + "id=" + id + ", row=" + row
+                + ", column=" + column + ", price=" + price
+                + ", accountId=" + accountId + '}';
     }
 }
