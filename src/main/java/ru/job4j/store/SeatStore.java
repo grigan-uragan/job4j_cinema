@@ -1,5 +1,8 @@
 package ru.job4j.store;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 import ru.job4j.model.Seat;
 import org.apache.commons.dbcp2.BasicDataSource;
 
@@ -15,6 +18,7 @@ import java.util.List;
 import java.util.Properties;
 
 public class SeatStore implements Store<Seat> {
+    private static final Logger LOG = LogManager.getLogger(SeatStore.class);
     private final BasicDataSource pool = new BasicDataSource();
 
     private SeatStore() {
@@ -24,7 +28,7 @@ public class SeatStore implements Store<Seat> {
             properties.load(reader);
             Class.forName(properties.getProperty("jdbc.driver"));
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LOG.error("some trouble with initialization", e);
         }
         pool.setDriverClassName(properties.getProperty("jdbc.driver"));
         pool.setUrl(properties.getProperty("jdbc.url"));
@@ -37,7 +41,7 @@ public class SeatStore implements Store<Seat> {
 
     @Override
     public int save(Seat element) {
-        if (element.getAccountId() != 0) {
+        if (element.getId() != 0) {
             update(element);
         } else {
             int id = create(element);
@@ -61,7 +65,7 @@ public class SeatStore implements Store<Seat> {
                         resultSet.getInt("account_id")));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("some trouble with sql query or database connection", e);
         }
         return result;
     }
@@ -82,7 +86,7 @@ public class SeatStore implements Store<Seat> {
                         resultSet.getInt("account_id"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("some trouble with sql query or database connection", e);
         }
         return null;
     }
@@ -106,7 +110,7 @@ public class SeatStore implements Store<Seat> {
                 id = resultSet.getInt("seat_id");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("some trouble with sql query or database connection", e);
         }
         return id;
     }
@@ -119,7 +123,7 @@ public class SeatStore implements Store<Seat> {
             statement.setInt(2, seat.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOG.error("some trouble with sql query or database connection", e);
         }
     }
 

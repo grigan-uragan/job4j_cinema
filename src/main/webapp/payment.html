@@ -14,24 +14,35 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <title>Title</title>
+    <title>Payment</title>
 </head>
 <body>
 <div class="container">
     <p id="info"></p>
+    <form>
+        <div class="row pt-3">
+            <div class="form-group">
+                <label for="account">Ваше Имя</label>
+                <input type="text" name="account" id="account" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="tel">Телефон</label>
+                <input type="text" name="tel" id="tel" class="form-control">
+            </div>
+        </div>
+        <div class="row float-right">
+            <button type="submit" class="btn btn-success">Оплатить</button>
+        </div>
+    </form>
 </div>
+
 <script>
-    $(document).ready(function (data) {
-        console.log(data)
-        const res = JSON.parse(data)
-        let sum;
-        let count;
-        for (let item of res) {
-            sum += item.price
-            count++
-        }
-        $('#info').text('Выкупили ' + count + ' билета на сумму ' + sum )
-    })
+    $(document).ready(function () {
+        const temp = sessionStorage.getItem("x")
+        const temp = localStorage.getItem("x")
+        console.log(temp)
+        $('#info').text(temp)
+    } )
 </script>
 </body>
 </html>

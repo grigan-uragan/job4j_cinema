@@ -26,9 +26,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <div class="container">
     <div class="row pt-3">
-        <p bg id="showButton" onclick="hallStateRequest()">Show hall</p>
+        <p bg id="showButton" >Show hall</p>
     </div>
-    <form id="form" method="post" action="http://localhost:8080/cinema/reserve" name="form">
+    <form id="form" method="post" action="payment.html" name="form" onsubmit="payTicket(); return false">
     <div class="row pt-3">
         <h4>
             Бронирование месте на сеанс
@@ -48,13 +48,36 @@
             </div>
         </div>
     <div class="row float-right">
-        <button  type="submit" class="btn btn-success">Оплатить</button>
+        <button  type="submit" class="btn btn-success" >Оплатить</button>
     </div>
     </form>
     <p id="info"></p>
 </div>
 <script>
-    function hallStateRequest() {
+    function payTicket() {
+        $.ajax({
+            type: 'POST',
+            crossDomain: true,
+            url: 'http://localhost:8080/cinema/reserve',
+            dataType: 'json',
+            data: ($('#form').serialize()),
+            success: funcPay
+        })
+    }
+
+    function funcPay(data) {
+        console.log(data)
+
+        let countTicket = 0;
+        let sum = 0;
+        for (let item of data) {
+            countTicket++
+            sum += item.price
+        }
+        $('#info').text('Вы купили ' + countTicket + ' билетов на сумму ' + sum)
+    }
+
+    $(document).ready(function () {
         $.ajax({
             type: 'POST',
             crossDomain: true,
@@ -63,7 +86,7 @@
             success: funcSuccess
         })
         console.log('will run')
-    }
+    })
 
     function funcSuccess(data) {
         const temp = JSON.parse(data)

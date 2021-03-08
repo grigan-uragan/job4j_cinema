@@ -5,10 +5,8 @@ import com.google.gson.GsonBuilder;
 import ru.job4j.model.Account;
 import ru.job4j.model.Seat;
 import ru.job4j.service.TicketBuyService;
-import ru.job4j.store.AccountStore;
 import ru.job4j.store.SeatStore;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +40,7 @@ public class ReserveServlet extends HttpServlet {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
         writer.println(gson.toJson(result));
+        System.out.println(gson.toJson(result));
         writer.flush();
     }
 }
