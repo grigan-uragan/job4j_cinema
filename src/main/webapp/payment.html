@@ -19,7 +19,7 @@
 <body>
 <div class="container">
     <p id="info"></p>
-    <form>
+    <form method="post" action="" id="pay" name="pay">
         <div class="row pt-3">
             <div class="form-group">
                 <label for="account">Ваше Имя</label>
@@ -31,18 +31,25 @@
             </div>
         </div>
         <div class="row float-right">
-            <button type="submit" class="btn btn-success">Оплатить</button>
+            <button type="submit" class="btn btn-success" onsubmit="sendData()">Оплатить</button>
         </div>
     </form>
 </div>
 
 <script>
-    $(document).ready(function () {
-        const temp = sessionStorage.getItem("x")
-        const temp = localStorage.getItem("x")
-        console.log(temp)
-        $('#info').text(temp)
-    } )
+   function sendData() {
+       const seats = sessionStorage.getItem('form')
+       $.ajax({
+           type: 'POST',
+           crossDomain: true,
+           url: 'http://localhost:8080/cinema/reserve',
+           data: ({seats: seats, name: $('#account').val(), tel: $('#tel')})
+       })
+   }
+
+   function funcPay() {
+       window.location.href = 'index.html'
+   }
 </script>
 </body>
 </html>

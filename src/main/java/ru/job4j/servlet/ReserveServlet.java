@@ -30,8 +30,9 @@ public class ReserveServlet extends HttpServlet {
                 result.add(seat);
             }
         }
-        String name = req.getParameter("account");
+        String name = req.getParameter("name");
         String tel = req.getParameter("tel");
+        String se = req.getParameter("seats");
         Account account = new Account(name, tel);
         service.saleTicket(result, account);
         Gson gson = new GsonBuilder().create();

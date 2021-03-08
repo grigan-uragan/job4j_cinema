@@ -26,43 +26,28 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <div class="container">
     <div class="row pt-3">
-        <p bg id="showButton" >Show hall</p>
+        <p bg id="showButton">Show hall</p>
     </div>
-    <form id="form" method="post" action="payment.html" name="form" onsubmit="payTicket(); return false">
-    <div class="row pt-3">
-        <h4>
-            Бронирование месте на сеанс
-        </h4>
+    <form id="form" method="post" action="" name="form" onsubmit="payTicket(); return false">
+        <div class="row pt-3">
+            <h4>
+                Бронирование месте на сеанс
+            </h4>
             <table class="table table-bordered" id="table">
 
             </table>
-    </div>
-        <div class="row pt-3">
-            <div class="form-group">
-                <label for="account">Ваше Имя</label>
-                <input type="text" name="account" id="account" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="tel">Телефон</label>
-                <input type="text" name="tel" id="tel" class="form-control">
-            </div>
         </div>
-    <div class="row float-right">
-        <button  type="submit" class="btn btn-success" >Оплатить</button>
-    </div>
+        <div class="row float-right">
+            <button type="submit" class="btn btn-success">Оплатить</button>
+        </div>
     </form>
     <p id="info"></p>
 </div>
 <script>
     function payTicket() {
-        $.ajax({
-            type: 'POST',
-            crossDomain: true,
-            url: 'http://localhost:8080/cinema/reserve',
-            dataType: 'json',
-            data: ($('#form').serialize()),
-            success: funcPay
-        })
+        const form = $('#form').serialize()
+        sessionStorage.setItem('form', form)
+        window.location.href = 'payment.html'
     }
 
     function funcPay(data) {
