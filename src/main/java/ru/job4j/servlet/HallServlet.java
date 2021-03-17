@@ -12,21 +12,36 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HallServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        TicketBuyService service = new TicketBuyService(SeatStore.instOf());
+        List<Seat> seats = service.showHall();
+        Gson gson = new GsonBuilder().create();
+        String result = gson.toJson(seats);
+        resp.setContentType("json");
+        resp.getWriter().write(result);
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        resp.setContentType("text/plain");
-        resp.setCharacterEncoding("UTF-8");
-        resp.setHeader("Access-Control-Allow-Origin", "*");
-        PrintWriter writer = new PrintWriter(resp.getOutputStream());
+        String form = req.getParameter("norm");
+        String[] strings = form.split("&");
+        List<Integer> ids = new ArrayList<>();
+        for (String str : strings) {
+            String s = str.substring(0, str.indexOf('='));
+            int id = Integer.parseInt(s);
+            ids.add(id);
+        }
         TicketBuyService service = new TicketBuyService(SeatStore.instOf());
-        List<Seat> seats = service.showHall();
+        List<Seat> seats = new ArrayList<>();
+        ids.forEach(integer -> seats.add(service.getSeat(integer)));
         Gson gson = new GsonBuilder().create();
-        writer.println(gson.toJson(seats));
-        writer.flush();
+        resp.getWriter().write(gson.toJson(seats));
     }
 }

@@ -17,39 +17,61 @@
     <title>Payment</title>
 </head>
 <body>
-<div class="container">
-    <p id="info"></p>
-    <form method="post" action="" id="pay" name="pay">
-        <div class="row pt-3">
-            <div class="form-group">
-                <label for="account">Ваше Имя</label>
-                <input type="text" name="account" id="account" class="form-control">
-            </div>
-            <div class="form-group">
-                <label for="tel">Телефон</label>
-                <input type="text" name="tel" id="tel" class="form-control">
-            </div>
+<div class="container px-4">
+    <div class="row align-items-start">
+        <div class="col p-3">
+            <h3 id="info"></h3>
+            <form method="post" action="" id="pay" name="pay">
+                <div class="row pt-3">
+                    <div class="form-group">
+                        <label for="account">Ваше Имя</label>
+                        <input type="text" name="account" id="account" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="tel">Телефон</label>
+                        <input type="text" name="tel" id="tel" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-success" onclick="sendUserData()">Оплатить</button>
+                </div>
+            </form>
         </div>
-        <div class="row float-right">
-            <button type="submit" class="btn btn-success" onsubmit="sendData()">Оплатить</button>
-        </div>
-    </form>
+    </div>
 </div>
 
 <script>
-   function sendData() {
-       const seats = sessionStorage.getItem('form')
-       $.ajax({
-           type: 'POST',
-           crossDomain: true,
-           url: 'http://localhost:8080/cinema/reserve',
-           data: ({seats: seats, name: $('#account').val(), tel: $('#tel')})
-       })
-   }
+    function sendUserData() {
+        const seats = sessionStorage.getItem('seats')
+        const temp = JSON.parse(seats)
+        const name = $('#account').val()
+        const tel = $('#tel').val()
+        console.log(temp)
+        console.log(name)
+        console.log()
+        $.ajax({
+            type: 'POST',
+            crossDomain: true,
+            url: 'http://localhost:8080/cinema/reserve',
+            dataType: 'text',
+            data: ({seats: seats, name: name, tel: tel}),
+            success: function () {
+                window.location.href = '/cinema/index.html'
+            }
+        })
+    }
 
-   function funcPay() {
-       window.location.href = 'index.html'
-   }
+    $(document).ready(function () {
+        const seats = sessionStorage.getItem('seats')
+        console.log(seats)
+        const temp = JSON.parse(seats)
+        let sum = 0
+        for (let seat of temp) {
+            sum += seat.price
+        }
+        document.getElementById('info').innerText = 'Сумма к оплате ' + sum;
+    })
+
 </script>
 </body>
 </html>

@@ -8,93 +8,43 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="script.js"></script>
     <title>Hello, world!</title>
 </head>
 <body>
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<div class="container">
-    <div class="row pt-3">
-        <p bg id="showButton">Show hall</p>
+<div class="container px-4">
+    <div class="row align-items-start">
+        <div class="col p-3">
+            <p bg id="showButton">Show hall</p>
+
+            <form id="form">
+                <div class="row pt-3">
+                    <h4>
+                        Бронирование месте на сеанс
+                    </h4>
+                    <table class="table table-bordered" id="table">
+
+                    </table>
+                </div>
+                <div class="row float-right">
+                    <button type="button" class="btn btn-success" onclick="sendData()">Оплатить</button>
+                </div>
+            </form>
+            <p id="info"></p>
+        </div>
     </div>
-    <form id="form" method="post" action="" name="form" onsubmit="payTicket(); return false">
-        <div class="row pt-3">
-            <h4>
-                Бронирование месте на сеанс
-            </h4>
-            <table class="table table-bordered" id="table">
-
-            </table>
-        </div>
-        <div class="row float-right">
-            <button type="submit" class="btn btn-success">Оплатить</button>
-        </div>
-    </form>
-    <p id="info"></p>
 </div>
-<script>
-    function payTicket() {
-        const form = $('#form').serialize()
-        sessionStorage.setItem('form', form)
-        window.location.href = 'payment.html'
-    }
-
-    function funcPay(data) {
-        console.log(data)
-
-        let countTicket = 0;
-        let sum = 0;
-        for (let item of data) {
-            countTicket++
-            sum += item.price
-        }
-        $('#info').text('Вы купили ' + countTicket + ' билетов на сумму ' + sum)
-    }
-
-    $(document).ready(function () {
-        $.ajax({
-            type: 'POST',
-            crossDomain: true,
-            url: 'http://localhost:8080/cinema/hall',
-            dataType: 'text',
-            success: funcSuccess
-        })
-        console.log('will run')
-    })
-
-    function funcSuccess(data) {
-        const temp = JSON.parse(data)
-        let table = $('#table')
-        let r = 0
-        for (let item of temp) {
-            if (r !== item.row || r === 0) {
-                r = item.row
-                table.append('<tr>')
-            }
-
-            if (item.accountId === 0) {
-                let td = '<td> Ряд '
-                    + item.row + ' Место' + item.column + ' Цена ' + item.price
-                    + '<input name="seat' + item.id + '" type="checkbox">'
-                    + '</td>'
-                table.append(td)
-            }
-            if (item.column === 10) {
-                table.append('</tr>')
-            }
-        }
-    }
-</script>
 </body>
 </html>

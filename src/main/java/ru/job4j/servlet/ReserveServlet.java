@@ -2,6 +2,7 @@ package ru.job4j.servlet;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import ru.job4j.model.Account;
 import ru.job4j.model.Seat;
 import ru.job4j.service.TicketBuyService;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,27 +23,13 @@ public class ReserveServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         TicketBuyService service = new TicketBuyService(SeatStore.instOf());
-        List<Seat> seats = service.showHall();
-        List<Seat> result = new ArrayList<>();
-        for (Seat seat : seats) {
-            String param = "seat" + seat.getId();
-            String reqParameter = req.getParameter(param);
-            if ("on".equals(reqParameter)) {
-                result.add(seat);
-            }
-        }
+        Gson gson = new GsonBuilder().create();
         String name = req.getParameter("name");
         String tel = req.getParameter("tel");
-        String se = req.getParameter("seats");
+        String seat = req.getParameter("seats");
+        Type type = new TypeToken<List<Seat>>() { }.getType();
+        List<Seat> res = gson.fromJson(seat, type);
         Account account = new Account(name, tel);
-        service.saleTicket(result, account);
-        Gson gson = new GsonBuilder().create();
-        resp.setContentType("text/plain");
-        resp.setCharacterEncoding("UTF-8");
-        resp.setHeader("Access-Control-Allow-Origin", "*");
-        PrintWriter writer = new PrintWriter(resp.getOutputStream());
-        writer.println(gson.toJson(result));
-        System.out.println(gson.toJson(result));
-        writer.flush();
+        service.saleTicket(res, account);
     }
 }

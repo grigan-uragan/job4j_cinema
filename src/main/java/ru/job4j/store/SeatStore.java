@@ -54,7 +54,7 @@ public class SeatStore implements Store<Seat> {
     public List<Seat> findAll() {
         List<Seat> result = new ArrayList<>();
         try (Connection connection = pool.getConnection();
-             PreparedStatement statement = connection.prepareStatement("select * from seats")) {
+             PreparedStatement statement = connection.prepareStatement("select * from seats order by seat_id")) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 result.add(new Seat(
